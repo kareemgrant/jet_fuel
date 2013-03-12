@@ -3,6 +3,9 @@ source 'https://rubygems.org'
 # Specify your gem's dependencies in jet_fuel.gemspec
 gemspec
 
+gem 'haml'
+
+
 group :test, :development do
   gem 'rspec'
   gem 'simplecov'
@@ -16,4 +19,7 @@ group :test, :development do
   gem 'rake'
   gem 'pry'
   gem "pry-remote"
+  gem 'sqlite3'
+  gem 'rspec-rails'
+  gem 'sinatra-partial'
 end

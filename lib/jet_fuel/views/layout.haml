@@ -1,0 +1,14 @@
+!!!
+%html{:xhmns => "http://www.w3.org/1999/xhtml", :lang => "en", "xml:lang" => "en"}
+  %head
+    %meta{:name => "viewport", :content => "width=device-width, initial-scale=1.0"}
+    %link{:href=>"/bootstrap/css/bootstrap.css", :rel => 'stylesheet', :type => "text/css"}
+    %link{:href=>"/bootstrap/css/bootstrap-responsive.css", :rel => 'stylesheet', :type => "text/css"}
+    %link{:href=>"/css/styles.css", :rel => 'stylesheet', :type => "text/css"}
+    %link{:href=>"../assets/ico/favicon.png", :rel => 'shortcut icon'}
+    %title= @title
+
+  %body
+    = partial(:main_nav)
+    .container
+      = yield
