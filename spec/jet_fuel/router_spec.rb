@@ -15,7 +15,14 @@ describe JetFuel::Router do
 
       last_response.status.should eq(200)
     end
+  end
 
+  describe 'POST /' do
+    it "saves the url to the database" do
+      post '/', original: "http://jumpstartlab.com", key: "reemo"
+
+      last_response.status.should eq(200)
+    end
   end
 
 end

@@ -22,4 +22,5 @@ group :test, :development do
   gem 'sqlite3'
   gem 'rspec-rails'
   gem 'sinatra-partial'
+  gem 'tux'
 end

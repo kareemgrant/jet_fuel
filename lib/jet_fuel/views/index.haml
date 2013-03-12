@@ -1,11 +1,13 @@
--# %h1= @message
+%h3= @message
 
 .row
   .span6.offset3
-    %form.bs-docs-example
+    %form.bs-container{:action => "/urls", :method => "post"}
       %fieldset
         %legend Enter a URL to Shorten
         %label
-        %input.span4{:type => "text", :placeholder => "Enter a url"}
-        %span.help-block Help text
-        %button.btn.btn-primary{:type => "Submit"} Submit
+        .input-prepend
+          %span.add-on www.
+          %input.span4#prependedInput{:type => "text", :name =>"original", :placeholder => "Enter a url"}
+        %br
+        %button.btn.btn-primary{:type => "Submit"} Shorten

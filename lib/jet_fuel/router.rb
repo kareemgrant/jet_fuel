@@ -17,12 +17,46 @@ module JetFuel
 
     get '/' do
       @title = "JetFuel, the Url Shortner that doesn't suck"
-      @message = "Welcome to Reemo's world!!!!"
+      @url = Url.new
       haml :index, :layout => :layout
     end
 
-    get '/shorten_test' do
-      "Yo pimping!!!"
+    get '/hello/:name' do |n|
+      "Hello #{n}!"
+    end
+
+    post '/urls' do
+      key = generate_key
+      @url = Url.new(original: params[:original], key: key)
+      if @url.save
+        redirect "/success/#{@url.key}"
+      else
+        @message = "There was an issue: #{@url.errors.to_a.join(" ")}"
+        haml :error
+      end
+    end
+
+    get '/success/*' do |key|
+      @url = Url.where("key = ?", params[:splat].join).first
+      haml :success
+    end
+
+    get '/*' do
+      # add regex to provide more precise matching
+      if @url = Url.where("key = ?", params[:splat].join).first
+        redirect "http://#{@url.original}"
+      else
+        raise Sinatra::NotFound
+      end
+    end
+
+
+    helpers do
+
+      def generate_key
+        "re.emo/#{Array.new(5){rand(36).to_s(36)}.join}"
+      end
+
     end
 
   end
