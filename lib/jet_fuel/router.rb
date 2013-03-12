@@ -21,10 +21,6 @@ module JetFuel
       haml :index, :layout => :layout
     end
 
-    get '/hello/:name' do |n|
-      "Hello #{n}!"
-    end
-
     post '/urls' do
 
       @url = Url.where(original: params[:original]).first_or_create
