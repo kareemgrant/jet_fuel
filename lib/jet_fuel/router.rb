@@ -26,9 +26,9 @@ module JetFuel
     end
 
     post '/urls' do
-      key = generate_key
-      @url = Url.new(original: params[:original], key: key)
-      if @url.save
+
+      @url = Url.where(original: params[:original]).first_or_create
+      if @url
         redirect "/success/#{@url.key}"
       else
         @message = "There was an issue: #{@url.errors.to_a.join(" ")}"
@@ -48,15 +48,6 @@ module JetFuel
       else
         raise Sinatra::NotFound
       end
-    end
-
-
-    helpers do
-
-      def generate_key
-        "re.emo/#{Array.new(5){rand(36).to_s(36)}.join}"
-      end
-
     end
 
   end

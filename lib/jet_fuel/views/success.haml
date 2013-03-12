@@ -1,3 +1,18 @@
-%h1
-  Congrats! your shortened url is
-  %a{:href=>"/#{@url.key}"}= @url.key
+.row
+  .span6.offset3
+    .short-url-container
+      %h3.text-center=@url.original
+      %h4.text-center
+        Congrats! your shortened url is:
+      %p.text-center
+        %a.result.text-center{:href=>"/#{@url.key}"}= @url.key
+
+    %form.bs-container{:action => "/urls", :method => "post"}
+      %fieldset
+        %legend Enter another URL to Shorten
+        %label
+        .input-prepend
+          %span.add-on http//:
+          %input.span4#prependedInput{:type => "text", :name =>"original", :placeholder => "Enter a url"}
+        %br
+        %button.btn.btn-primary{:type => "Submit"} Shorten
