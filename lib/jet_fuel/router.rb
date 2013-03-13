@@ -20,7 +20,7 @@ module JetFuel
     get '/' do
       @title = "JetFuel, the Url Shortner that doesn't suck"
       @url = Url.new
-      haml :index, :layout => :layout
+      haml :index
     end
 
     post '/urls' do

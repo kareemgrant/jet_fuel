@@ -8,9 +8,7 @@
       %a.brand{:href => "/"} JetFuel
       .nav-collapse.collapse
         %ul.nav.pull-right
-          - if @current_user
-            -# %li
-            -#   %a{:href => "/"} About
+          - if current_user
             %li
               %a{:href => "/logout"} Logout
             %li
