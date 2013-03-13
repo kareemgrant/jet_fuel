@@ -3,7 +3,5 @@ module JetFuel
 
     validates :username, uniqueness: true
 
-
-
   end
 end

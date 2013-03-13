@@ -10,10 +10,11 @@ module JetFuel
 
   class Router < Sinatra::Base
     set :views, './lib/jet_fuel/views'
+    set :sessions, true
+    set :database, ENV['DATABASE_URL']
 
     register Sinatra::ActiveRecordExtension
     register Sinatra::Partial
-    set :database, ENV['DATABASE_URL']
 
     get '/' do
       @title = "JetFuel, the Url Shortner that doesn't suck"
@@ -49,12 +50,28 @@ module JetFuel
       "Reemo"
     end
 
-    # post '/register' do
+    post '/register' do
+      clear_password = params[:password]
+      salt = generate_salt
+      password_signer = Digest::HMAC.new(salt,Digest::SHA1)
+      crypted_password = password_signer.hexdigest(clear_password)
+      @user = User.new(username: params[:username], salt: salt, crypted_password: crypted_password)
 
-    # end
+      if @user.save
+        redirect "/user/#{@user.username}"
+      else
+        @errors = @user.errors.to_a.join
+        haml :error
+      end
+    end
 
     get '/register' do
       haml :register
+    end
+
+    get '/user/:username' do |username|
+      @user = User.find_by_username(username)
+      haml :user
     end
 
     get '/*' do
@@ -64,6 +81,14 @@ module JetFuel
       else
         raise Sinatra::NotFound
       end
+    end
+
+    helpers do
+
+      def generate_salt
+        Array.new(32){rand(36).to_s(36)}.join
+      end
+
     end
 
   end
