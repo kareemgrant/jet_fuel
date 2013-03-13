@@ -102,6 +102,19 @@ module JetFuel
         @errors = "you are not authorized to view this page"
         haml :error
       end
+    end
+
+    post '/add_vanity_url' do
+
+      base = params[:base]
+      vanity_url = current_user.vanity_urls.create(base: base)
+
+      if vanity_url.valid?
+        redirect "/user/#{current_user.username}"
+      else
+        @errors = vanity_url.errors.to_a.join
+        haml :error
+      end
 
     end
 

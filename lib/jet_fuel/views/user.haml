@@ -1,6 +1,35 @@
 .row
   .span6
     %h3 Username: #{@user.username}
-    %h4
+    %h5
       API Key: #{@user.api_key}
+    %br
+
+    %h4
+      Add Vanity Url
+      %form.form-horizontal.bs-container{:action => "/add_vanity_url", :method => "post"}
+        .control-group
+          %label.control-label{:for =>"inputUsername"} Vanity Url
+          .controls
+            %input{:type => "text", :name => "base", :placeholder =>"Add vanity url"}
+        .control-group
+          .controls
+            %button.btn.btn-primary{:type => "submit"} Add Url
+
+    %br
+
+    %h4
+      Vanity Url List
+
+    %table.table.table-striped.table-bordered
+      %thead
+        %tr
+          %th Vanity Urls
+          %th Actions
+      %tbody
+        - @current_user.vanity_urls.each do |url|
+          %tr
+            %td=url.base
+            %td
+              %a{:href => "#"} delete
 

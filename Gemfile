@@ -4,6 +4,7 @@ source 'https://rubygems.org'
 gemspec
 
 gem 'haml'
+gem 'pg'
 
 
 group :test, :development do

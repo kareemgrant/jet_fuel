@@ -1,5 +1,6 @@
 module JetFuel
   class User < ActiveRecord::Base
+    has_many :vanity_urls
 
     validates :username, uniqueness: true
     validates :api_key, uniqueness: true

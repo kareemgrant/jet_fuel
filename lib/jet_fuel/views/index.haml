@@ -12,3 +12,9 @@
           %input.span4#prependedInput{:type => "text", :name =>"original", :placeholder => "Enter a url"}
         %br
         %button.btn.btn-primary{:type => "Submit"} Shorten
+
+    %br
+    - if current_user
+      %p
+        Hi #{current_user.username}! Get more detailed tracking by using one of your
+        %a{:href => "user/#{current_user.username}"} vanity urls
