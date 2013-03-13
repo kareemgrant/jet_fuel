@@ -9,12 +9,13 @@ module JetFuel
   ENV['DATABASE_URL'] ||= database["url"]
 
   class Router < Sinatra::Base
-    set :views, './lib/jet_fuel/views'
-    set :sessions, true
-    set :database, ENV['DATABASE_URL']
-
     register Sinatra::ActiveRecordExtension
     register Sinatra::Partial
+
+    set :views, './lib/jet_fuel/views'
+    set :sessions, true
+    set :session_secret, 'super secret'
+    set :database, ENV['DATABASE_URL']
 
     get '/' do
       @title = "JetFuel, the Url Shortner that doesn't suck"
@@ -24,9 +25,9 @@ module JetFuel
 
     post '/urls' do
 
-      @url = Url.where(original: params[:original]).first_or_create
-      if @url
-        redirect "/success/#{@url.key}"
+      url = Url.where(original: params[:original]).first_or_create
+      if url
+        redirect "/success/#{url.key}"
       else
         @message = "There was an issue: #{@url.errors.to_a.join(" ")}"
         haml :error
@@ -38,12 +39,29 @@ module JetFuel
       haml :success
     end
 
-    # post '/login' do
+    post '/login' do
+      clear_password = params[:password]
+      user = User.find_by_username(params[:username])
 
-    # end
+      password_verifier = Digest::HMAC.new(user.salt, Digest::SHA1)
+      submitted_password = password_verifier.hexdigest(clear_password)
+
+      if user.crypted_password == submitted_password
+        session[:user_id] = user.id
+        redirect "/user/#{user.username}"
+      else
+        @errors = "Invalid username or password"
+        haml :error
+      end
+    end
 
     get '/login' do
       haml :login
+    end
+
+    get '/logout' do
+      session[:user_id] = nil
+      redirect "/"
     end
 
     get '/kareem' do
@@ -55,12 +73,13 @@ module JetFuel
       salt = generate_salt
       password_signer = Digest::HMAC.new(salt,Digest::SHA1)
       crypted_password = password_signer.hexdigest(clear_password)
-      @user = User.new(username: params[:username], salt: salt, crypted_password: crypted_password)
+      user = User.new(username: params[:username], salt: salt, crypted_password: crypted_password)
 
-      if @user.save
-        redirect "/user/#{@user.username}"
+      if user.save
+        session[:user_id] = user.id
+        redirect "/user/#{user.username}"
       else
-        @errors = @user.errors.to_a.join
+        @errors = user.errors.to_a.join
         haml :error
       end
     end
@@ -71,7 +90,14 @@ module JetFuel
 
     get '/user/:username' do |username|
       @user = User.find_by_username(username)
-      haml :user
+
+      if current_user == @user
+        haml :user
+      else
+        @errors = "you are not authorized to view this page"
+        haml :error
+      end
+
     end
 
     get '/*' do
@@ -84,6 +110,10 @@ module JetFuel
     end
 
     helpers do
+
+      def current_user
+        @current_user ||= User.find(session[:user_id]) if session[:user_id]
+      end
 
       def generate_salt
         Array.new(32){rand(36).to_s(36)}.join

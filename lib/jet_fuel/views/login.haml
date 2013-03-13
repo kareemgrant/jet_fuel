@@ -1,7 +1,7 @@
 .row
   .span6.offset3
     %h2.text-center Login
-    %form.form-horizontal.bs-container
+    %form.form-horizontal.bs-container{:action => "/login", :method => "post"}
       .control-group
         %label.control-label{:for =>"inputUsername"} Username
         .controls
