@@ -26,10 +26,10 @@ module JetFuel
     post '/urls' do
 
       url = Url.where(original: params[:original]).first_or_create
-      if url
+      if url.valid?
         redirect "/success/#{url.key}"
       else
-        @message = "There was an issue: #{@url.errors.to_a.join(" ")}"
+        @errors = "There was an issue: #{url.errors.to_a.join(" ")}"
         haml :error
       end
     end
@@ -43,14 +43,19 @@ module JetFuel
       clear_password = params[:password]
       user = User.find_by_username(params[:username])
 
-      password_verifier = Digest::HMAC.new(user.salt, Digest::SHA1)
-      submitted_password = password_verifier.hexdigest(clear_password)
+      if user
+        password_verifier = Digest::HMAC.new(user.salt, Digest::SHA1)
+        submitted_password = password_verifier.hexdigest(clear_password)
 
-      if user.crypted_password == submitted_password
-        session[:user_id] = user.id
-        redirect "/user/#{user.username}"
+        if user.crypted_password == submitted_password
+          session[:user_id] = user.id
+          redirect "/user/#{user.username}"
+        else
+          @errors = "Invalid username or password"
+          haml :error
+        end
       else
-        @errors = "Invalid username or password"
+        @errors = "User account not found"
         haml :error
       end
     end

@@ -3,10 +3,12 @@ module JetFuel
 
     # add before_validation callback to determine if urls were prepended with http/https
     ## this could effectively replace valid_url? check
+    before_validation :check_uri_scheme
     validates_presence_of :original
     validate :valid_uri?
     validates_format_of :original, with: /^(http|https):\/\/|[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,6}(:[0-9]{1,5})?(\/.*)?$/ix, message: "Invalid format"
     before_create :generate_key
+
 
 
 
@@ -26,6 +28,7 @@ module JetFuel
     end
 
     def check_uri_scheme
+      self.original = "http://#{original}"
     end
 
   end
