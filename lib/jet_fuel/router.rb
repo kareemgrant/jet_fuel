@@ -49,7 +49,7 @@ module JetFuel
 
         if user.crypted_password == submitted_password
           session[:user_id] = user.id
-          redirect "/user/#{user.username}"
+          redirect "/profile/#{user.username}"
         else
           @errors = "Invalid username or password"
           haml :error
@@ -82,7 +82,7 @@ module JetFuel
 
       if user.save
         session[:user_id] = user.id
-        redirect "/user/#{user.username}"
+        redirect "/profile/#{user.username}"
       else
         @errors = user.errors.to_a.join
         haml :error
@@ -93,13 +93,24 @@ module JetFuel
       haml :register
     end
 
-    get '/user/:username' do |username|
+    get '/profile/:username' do |username|
       @user = User.find_by_username(username)
 
       if current_user == @user
-        haml :user
+        haml :profile
       else
-        @errors = "you are not authorized to view this page"
+        @errors = "We have Bank Level Encrpytion fool! You are not authorized to view this page"
+        haml :error
+      end
+    end
+
+    get '/vanity_urls/:username' do |username|
+      @user = User.find_by_username(username)
+
+      if current_user == @user
+        haml :vanity_urls
+      else
+        @errors = "We have Bank Level Encrpytion fool! You are not authorized to view this page"
         haml :error
       end
     end
@@ -110,7 +121,7 @@ module JetFuel
       vanity_url = current_user.vanity_urls.create(base: base)
 
       if vanity_url.valid?
-        redirect "/user/#{current_user.username}"
+        redirect "/vanity_urls/#{current_user.username}"
       else
         @errors = vanity_url.errors.to_a.join
         haml :error

@@ -1,10 +1,12 @@
 .row
-  .span6
-    %h3 Username: #{@user.username}
-    %h5
-      API Key: #{@user.api_key}
-    %br
+  %br
+  %ul.nav.nav-tabs
+    %li
+      %a{:href => "/profile/#{current_user.username}"} Profile
+    %li.active
+      %a{:href => "/vanity_urls/#{current_user.username}"} Manage Vanity Urls
 
+  .span6
     %h4
       Add Vanity Url
       %form.form-horizontal.bs-container{:action => "/add_vanity_url", :method => "post"}
@@ -32,4 +34,7 @@
             %td=url.base
             %td
               %a{:href => "#"} delete
+
+
+
 
