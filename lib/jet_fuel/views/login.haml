@@ -1,5 +1,6 @@
 .row
   .span6.offset3
+    %h2.text-center Login
     %form.form-horizontal.bs-container
       .control-group
         %label.control-label{:for =>"inputUsername"} Username
@@ -9,10 +10,6 @@
         %label.control-label{:for =>"inputPassword"} Password
         .controls
           %input#inputPassword{:type => "password", :name => "password", :placeholder =>"Password"}
-      .control-group
-        %label.control-label{:for =>"inputPassword"} Password Confirm
-        .controls
-          %input#inputPassword{:type => "password", :name => "password_confirmation", :placeholder =>"Confirm Password"}
       .control-group
         .controls
           %button.btn{:type => "submit"} Login

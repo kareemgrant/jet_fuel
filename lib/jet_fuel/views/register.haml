@@ -1,0 +1,21 @@
+.row
+  .span6.offset3
+    %h2.text-center Register
+    %form.form-horizontal.bs-container
+      .control-group
+        %label.control-label{:for =>"inputUsername"} Username
+        .controls
+          %input{:type => "text", :name => "username", :placeholder =>"Username"}
+      .control-group
+        %label.control-label{:for =>"inputPassword"} Password
+        .controls
+          %input#inputPassword{:type => "password", :name => "password", :placeholder =>"Password"}
+      .control-group
+        %label.control-label{:for =>"inputPassword"} Password Confirm
+        .controls
+          %input#inputPassword{:type => "password", :name => "password_confirmation", :placeholder =>"Confirm Password"}
+      .control-group
+        .controls
+          %button.btn.btn-primary{:type => "submit"} Sign Up
+
+

@@ -37,15 +37,6 @@ module JetFuel
       haml :success
     end
 
-    get '/yo' do
-      # add regex to provide more precise matching
-      if @url = Url.where("key = ?", params[:splat].join).first
-        redirect "http://#{@url.original}"
-      else
-        raise Sinatra::NotFound
-      end
-    end
-
     # post '/login' do
 
     # end
@@ -62,9 +53,18 @@ module JetFuel
 
     # end
 
-    # get '/register' do
-    #   haml: register
-    # end
+    get '/register' do
+      haml :register
+    end
+
+    get '/*' do
+      # add regex to provide more precise matching
+      if @url = Url.where("key = ?", params[:splat].join).first
+        redirect "http://#{@url.original}"
+      else
+        raise Sinatra::NotFound
+      end
+    end
 
   end
 end
