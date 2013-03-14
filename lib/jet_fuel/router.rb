@@ -16,6 +16,7 @@ module JetFuel
     set :views, './lib/jet_fuel/views'
     set :sessions, true
     set :session_secret, 'super secret'
+    set :public, 'public'
 
     get '/' do
       @title = "JetFuel, the Url Shortner that doesn't suck"
@@ -161,7 +162,7 @@ module JetFuel
       redirect "/vanity_urls/#{current_user.username}"
     end
 
-    get '/*' do
+    get '/jt.fl/*' do
       # add regex to provide more precise matching
       if @url = Url.where("key = ?", params[:splat].join).first
         Url.increment_counter(:visits, @url.id)
