@@ -1,6 +1,8 @@
 .row
   %br
   %ul.nav.nav-tabs
+    %li
+      %a{:href => "/dashboard/#{current_user.username}"} Dashboard
     %li.active
       %a{:href => "/profile/#{current_user.username}"} Profile
     %li

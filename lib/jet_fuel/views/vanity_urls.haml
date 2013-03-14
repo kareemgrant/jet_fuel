@@ -2,6 +2,8 @@
   %br
   %ul.nav.nav-tabs
     %li
+      %a{:href => "/dashboard/#{current_user.username}"} Dashboard
+    %li
       %a{:href => "/profile/#{current_user.username}"} Profile
     %li.active
       %a{:href => "/vanity_urls/#{current_user.username}"} Manage Vanity Urls

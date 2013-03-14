@@ -2,11 +2,12 @@ require 'sinatra'
 require 'sinatra/activerecord'
 require 'sinatra/partial'
 require 'haml'
+require './config/environments'
 
 module JetFuel
-  database = YAML.load(File.open("database.yml"))
+  # database = YAML.load(File.open("./config/database.yml"))
 
-  ENV['DATABASE_URL'] ||= database["url"]
+  # ENV['DATABASE_URL'] ||= database["development"]
 
   class Router < Sinatra::Base
     register Sinatra::ActiveRecordExtension
@@ -15,7 +16,6 @@ module JetFuel
     set :views, './lib/jet_fuel/views'
     set :sessions, true
     set :session_secret, 'super secret'
-    set :database, ENV['DATABASE_URL']
 
     get '/' do
       @title = "JetFuel, the Url Shortner that doesn't suck"
@@ -27,7 +27,6 @@ module JetFuel
 
     post '/urls' do
       original = check_uri_scheme(params[:original])
-      #binding.pry
       url = Url.where(original: original).first_or_create
       if url.valid?
         redirect "/success/#{url.key}"
@@ -121,6 +120,20 @@ module JetFuel
         @errors = "We have Bank Level Encrpytion fool! You are not authorized to view this page"
         haml :error
       end
+    end
+
+    get '/dashboard/:username' do |username|
+
+      @user = User.find_by_username(username)
+      if current_user == @user
+        @user_vanity_urls ||= @user.vanity_urls
+        haml :dashboard
+      else
+        @errors = "I know what you did last summer, not cool man, not cool at all"
+        haml :error
+      end
+
+
     end
 
     post '/add_vanity_url' do

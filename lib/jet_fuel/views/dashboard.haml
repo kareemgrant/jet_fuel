@@ -1,0 +1,25 @@
+.alert.alert-block
+  %button.close{:type => "button", "data-dismiss"=>"alert"}
+  %h4 Warning!
+  This form doesn't work yet, but when it does, it will be sweet.
+
+.row
+  %br
+  %ul.nav.nav-tabs
+    %li.active
+      %a{:href => "/dashboard/#{current_user.username}"} Dashboard
+    %li
+      %a{:href => "/profile/#{current_user.username}"} Profile
+    %li
+      %a{:href => "/vanity_urls/#{current_user.username}"} Manage Vanity Urls
+
+  .span8.offset2
+    %h4.text-center Shorten a Vanity Url
+    %form.form-inline.bs-container{:action => "/urls", :method => "post"}
+      %select.span2
+        - @user_vanity_urls.each do |url|
+          %option= url.base
+
+
+      %input.input-xlarge{:type => "text", :placeholder => "Enter url to shorten"}
+      %button.btn.btn-primary{:type => "submit"} Shorten Url
