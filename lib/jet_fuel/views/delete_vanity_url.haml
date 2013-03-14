@@ -1,0 +1,9 @@
+- if @vanity_url
+  %p Are you sure you want to delete #{@vanity_url.base}?
+
+  %form{:action => "/delete_vanity_url/#{@vanity_url.id}", :method => "post"}
+    %input{:type => "hidden", :name => "_method", :value=> "delete"}
+    %button.btn.btn-primary{:type => "submit", :value => "Delete"} Confirm Delete
+    %button.btn{:type => "submit", :value => "Cancel"} Cancel
+- else
+  %p Vanity Url not found

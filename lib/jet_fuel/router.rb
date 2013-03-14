@@ -126,7 +126,18 @@ module JetFuel
         @errors = vanity_url.errors.to_a.join
         haml :error
       end
+    end
 
+    get '/delete_vanity_url/:id' do
+      @vanity_url = VanityUrl.find(params[:id].to_i)
+      @title = "Confirm deletion of vanity url: #{@vanity_url.base}"
+      haml :delete_vanity_url
+    end
+
+    post '/delete_vanity_url/:id' do
+      vanity_url = VanityUrl.find(params[:id].to_i)
+      vanity_url.destroy
+      redirect "/vanity_urls/#{current_user.username}"
     end
 
     get '/*' do
@@ -147,6 +158,10 @@ module JetFuel
       def generate_salt
         Array.new(32){rand(36).to_s(36)}.join
       end
+
+      # def delete_vanity_url_button(vanity_url_id)
+      #   haml :delete_vanity_url_button, locals: {vanity_url_id: vanity_url_id}
+      # end
 
     end
 
