@@ -164,7 +164,7 @@ module JetFuel
 
     get '/jt.fl/*' do
       # add regex to provide more precise matching
-      if @url = Url.where("key = ?", params[:splat].join).first
+      if @url = Url.where("key = ?", "jt.fl/#{params[:splat].join}").first
         Url.increment_counter(:visits, @url.id)
         redirect "http://#{@url.original}"
       else
