@@ -1,9 +1,13 @@
-- if @vanity_url
-  %p Are you sure you want to delete #{@vanity_url.base}?
-
-  %form{:action => "/delete_vanity_url/#{@vanity_url.id}", :method => "post"}
-    %input{:type => "hidden", :name => "_method", :value=> "delete"}
-    %button.btn.btn-primary{:type => "submit", :value => "Delete"} Confirm Delete
-    %button.btn{:type => "submit", :value => "Cancel"} Cancel
-- else
-  %p Vanity Url not found
+.row
+  .span8.offset2
+    - if @vanity_url
+      %p.text_center.confirm_delete
+        Are you sure you want to delete the following Vanity Url:
+        %span.confirm_delete #{@vanity_url.base}?
+      %br
+      %form{:action => "/delete_vanity_url/#{@vanity_url.id}", :method => "post"}
+        %input{:type => "hidden", :name => "_method", :value=> "delete"}
+        %button.btn.btn-primary{:type => "submit", :value => "Delete"} Confirm Delete
+        %a{:href => "/vanity_urls/#{current_user.username}", :value => "Cancel"} Cancel
+    - else
+      %p Vanity Url not found
