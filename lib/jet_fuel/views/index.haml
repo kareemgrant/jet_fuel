@@ -1,11 +1,11 @@
 %h3= @message
 
 .row
-  .span6.offset3
+  .span8.offset2
     %h1.text-center JetFuel
     %form.bs-container{:action => "/urls", :method => "post"}
       %fieldset
-        %legend Enter a URL to Shorten
+        %legend.text-center Enter a URL to Shorten
         %label
         .input-prepend
           %span.add-on http//:
@@ -18,3 +18,31 @@
       %p
         Hi #{current_user.username}! Get more detailed tracking by using one of your
         %a{:href => "/vanity_urls/#{current_user.username}"} vanity urls
+
+    %br
+    .row
+      .span4
+        %table.table.table-striped.table-bordered
+          %caption Most Popular Urls
+          %thead
+            %tr
+              %th url
+              %th visits
+            %tbody
+              - @popular_urls.each do |url|
+                %tr
+                  %td
+                    %a{:href => "#{url.original}"} #{url.original}
+                  %td= url.visits
+
+      .span4
+        %table.table.table-striped.table-bordered
+          %caption Most Recently Added Urls
+          %thead
+            %tr
+              %th url
+            %tbody
+              - @recent_urls.each do |url|
+                %tr
+                  %td
+                    %a{:href => "#{url.original}"} #{url.original}

@@ -20,12 +20,15 @@ module JetFuel
     get '/' do
       @title = "JetFuel, the Url Shortner that doesn't suck"
       @url = Url.new
+      @popular_urls ||= Url.limit(10).order("visits DESC")
+      @recent_urls ||= Url.limit(10).order("created_at DESC")
       haml :index
     end
 
     post '/urls' do
-
-      url = Url.where(original: params[:original]).first_or_create
+      original = check_uri_scheme(params[:original])
+      #binding.pry
+      url = Url.where(original: original).first_or_create
       if url.valid?
         redirect "/success/#{url.key}"
       else
@@ -36,7 +39,12 @@ module JetFuel
 
     get '/success/*' do |key|
       @url = Url.where("key = ?", params[:splat].join).first
-      haml :success
+      if @url
+        haml :success
+      else
+        @errors = "You barking up the wrong tree bro!!!!"
+        haml :error
+      end
     end
 
     post '/login' do
@@ -143,6 +151,7 @@ module JetFuel
     get '/*' do
       # add regex to provide more precise matching
       if @url = Url.where("key = ?", params[:splat].join).first
+        Url.increment_counter(:visits, @url.id)
         redirect "http://#{@url.original}"
       else
         raise Sinatra::NotFound
@@ -159,10 +168,14 @@ module JetFuel
         Array.new(32){rand(36).to_s(36)}.join
       end
 
-      # def delete_vanity_url_button(vanity_url_id)
-      #   haml :delete_vanity_url_button, locals: {vanity_url_id: vanity_url_id}
-      # end
-
+      def check_uri_scheme(url)
+        u = URI::parse(url)
+        if u.scheme.nil?
+          formatted_url = "http://#{url}"
+        else
+          formatted_url = url
+        end
+      end
     end
 
   end
