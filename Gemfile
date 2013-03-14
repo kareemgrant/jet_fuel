@@ -5,6 +5,7 @@ gemspec
 
 gem 'haml'
 gem 'pg'
+gem 'sinatra-partial'
 
 
 group :test, :development do
@@ -22,6 +23,5 @@ group :test, :development do
   gem "pry-remote"
   gem 'sqlite3'
   gem 'rspec-rails'
-  gem 'sinatra-partial'
   gem 'tux'
 end
