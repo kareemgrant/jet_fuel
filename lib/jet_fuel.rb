@@ -8,7 +8,7 @@ require 'jet_fuel/models/user'
 require 'jet_fuel/models/vanity_url'
 require 'jet_fuel/version'
 require 'jet_fuel/router'
-require 'pry'
+#require 'pry'
 
 module JetFuel
   # Your code goes here...
