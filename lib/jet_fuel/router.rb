@@ -16,7 +16,7 @@ module JetFuel
     set :views, './lib/jet_fuel/views'
     set :sessions, true
     set :session_secret, 'super secret'
-    set :public, 'public'
+    set :public_folder, 'public'
 
     get '/' do
       @title = "JetFuel, the Url Shortner that doesn't suck"
